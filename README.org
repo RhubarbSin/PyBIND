@@ -1,0 +1,10 @@
+This directory contains python modules for creating and writing BIND configuration files and zone files.
+
+These modules are are not intended or suitable for general manipulation of
+zones and zone files; use dnspython for that. These were created specifically for /writing/ files rather than parsing or otherwise manipulating them.
+
+Terminology and other reference information have been taken from ZYTRAX, Inc.'s "DNS for Rocket Scientists" (http://www.zytrax.com/books/dns).
+
+Patches and suggestions are welcome, but I created these of course to address my own uses.
+
+Add license information!
