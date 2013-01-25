@@ -1,7 +1,11 @@
 fwdzone
 revzone?
 revzone6
+*.conf
 *_test.py
 RCS/*
 *#
 *.pyc
+*.html
+dist/*
+build/*

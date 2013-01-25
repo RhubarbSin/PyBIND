@@ -9,8 +9,7 @@ external validation process like named-checkzone(8) on zone files.
 Host names are passed to dnsrecord.ResourceRecord methods unmodified;
 i.e. they must be terminated with a dot ('.') to be interpreted as
 fully qualified domain names (FQDNs)--otherwise they will be
-interpreted relative to $ORIGIN, so be diligent in minding your dots,
-especially with the 'rname' keyword.
+interpreted relative to $ORIGIN, so be diligent in minding your dots.
 
 IP addresses may be specified in any format accepted by
 ipaddr.IPAddress().
@@ -23,11 +22,9 @@ record, for example, adds an MX record for the whole domain unless
 otherwise specified. The 'ttl' keyword argument defaults to None, so
 records will use the zone's default time-to-live (TTL) unless
 otherwise specified.
-
-TODO: add DNSSEC support
 """
 
-__version__ = '$Revision: 1.16 $'
+__version__ = '$Revision: 1.21 $'
 # $Source: /home/blb/pybind/RCS/dnszone.py,v $
 
 import time
@@ -52,11 +49,10 @@ class Zone(object):
 
         Args:
             origin: (string) zone's root; '.' will be appended if necessary
-                    'example.com'
+              'example.com'
             epochserial: (boolean) whether to use number of seconds since
-                         epoch as default serial number in SOA record
+              epoch as default serial number in SOA record
             ttl: (string or integer) default time-to-live for resource records
-            '1h'
         """
 
         self.origin = origin
@@ -72,7 +68,7 @@ class Zone(object):
 
         Args:
             filename: (string) name of file to be written
-            'zonefile.hosts'
+              'zonefile.hosts'
         """
 
         with open(filename, 'w') as fh:
@@ -101,17 +97,17 @@ class Zone(object):
 
         Args:
             mname: (string) host name of name server authoritative for zone
-            'ns1.example.com.'
+              'ns1.example.com.'
             rname: (string) e-mail address of person responsible for zone
-            'hostmaster@example.com.'
+              'hostmaster@example.com'
             serial: (integer) serial number
-            '1969123100'
+              '1969123100'
             refresh: (string or integer) slave's refresh interval
             retry: (string or integer) slave's retry interval
             expiry: (string or integer) slave's expiry interval
             nxdomain: (string or integer) negative caching time (TTL)
             name: (string) name of node to which this record belongs
-            'example.com.'
+              'example.com.'
         """
 
         if not serial:
@@ -129,8 +125,9 @@ class Zone(object):
 
         Args:
             name_server: (string) host name of name server
-            'ns1.example.com.'
+              'ns1.example.com.'
             name: (string) name of node to which this record belongs
+              'example.com.'
             ttl: (string or integer) time-to-live
         """
 
@@ -146,9 +143,9 @@ class ForwardZone(Zone):
 
         Args:
             address: (string) IPv4 address
-            '192.168.1.1'
+              '192.168.1.1'
             name: (string) name of node to which this record belongs
-            'host.example.com.'
+              'host.example.com.'
             ttl: (string or integer) time-to-live
         """
 
@@ -160,9 +157,9 @@ class ForwardZone(Zone):
 
         Args:
             address: (string) IPv6 address
-            'fc00::1'
+              '2001:db8::1'
             name: (string) name of node to which this record belongs
-            'host.example.com.'
+              'host.example.com.'
             ttl: (string or integer) time-to-live
         """
 
@@ -174,9 +171,9 @@ class ForwardZone(Zone):
 
         Args:
             canonical: (string) canonical host name of host
-            'mail.example.com.'
+              'mail.example.com.'
             name: (string) name of node to which this record belongs
-            'mailserver.example.com.'
+              'mailserver.example.com.'
             ttl: (string or integer) time-to-live
         """
 
@@ -188,10 +185,10 @@ class ForwardZone(Zone):
 
         Args:
             mail_exchanger: (string) host name of mail exchanger
-            'mail.example.com.'
+              'mail.example.com.'
             preference: (integer) preference value of mail exchanger
             name: (string) name of node to which this record belongs
-            'example.com.'
+              'example.com.'
             ttl: (string or integer) time-to-live
         """
 
@@ -203,9 +200,9 @@ class ForwardZone(Zone):
 
         Args:
             text: (string) textual contents of record
-            'This is a text record'
+              'This is a text record'
             name: (string) name of node to which this record belongs
-            'example.com.'
+              'example.com.'
             ttl: (string or integer) time-to-live
         """
 
@@ -214,16 +211,16 @@ class ForwardZone(Zone):
 
 class ReverseZone(Zone):
 
-    """Reverse DNS zone"""
+    """Reverse DNS zone."""
 
     def add_ptr(self, address, name='@', ttl=None):
         """Add Pointer record to zone.
 
         Args:
             address: (string) IPv4 or IPv6 address
-            '192.168.1.1'
+              '192.168.1.1'
             name: (string) name of node to which this record belongs
-            'ns1.example.com.'
+              'ns1.example.com.'
             ttl: (string or integer) time-to-live
         """
 
@@ -245,7 +242,7 @@ def run_tests():
     z.add_mx('mail1')
     z.add_mx('mail2', 20, ttl=600)
     z.add_a('192.168.1.1', 'ns1')
-    z.add_aaaa('fc00::1', 'ns1')
+    z.add_aaaa('2001:db8::1', 'ns1')
     z.add_txt('v=spf1 mx ~all')
     z.add_cname('mailserver', 'mail')
     filename = 'fwdzone'
@@ -262,11 +259,11 @@ def run_tests():
     print 'Wrote %s.' % filename
 
     # create IPv6 reverse zone and write to file
-    z = ReverseZone('0.0.0.0.0.0.c.f.ip6.arpa', epochserial = True)
+    z = ReverseZone('0.0.0.0.0.0.c.f.ip6.arpa', epochserial=True)
     z.add_soa('ns1.example.com.', 'hostmaster@example.com.')
     z.add_ns('ns1.example.com.')
     z.add_ptr('192.168.1.1', 'ns1.example.com.')
-    z.add_ptr('fc00::1', 'ns1.example.com.')
+    z.add_ptr('2001:db8::1', 'ns1.example.com.')
     filename = 'revzone6'
     z.write_file(filename)
     print 'Wrote %s.' % filename
