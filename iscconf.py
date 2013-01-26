@@ -132,7 +132,7 @@ class Clause(_Conf, Element):
         Args:
             label: (str) type of clause
               'view'
-            additional: (tuple) additional data included between name and
+            additional: (tuple) additional data included between label and
               clause's opening brace
               ('example_view',)
         """
