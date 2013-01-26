@@ -25,7 +25,7 @@ class _Conf(object):
     def add_element(self, element):
         """Add element to elements."""
 
-        if not isinstance(element, Element):
+        if not isinstance(element, _Element):
             raise TypeError('element is not an Element')
         self.elements.append(element)
 
@@ -63,7 +63,7 @@ class ISCConf(_Conf):
                 element.write(fh)
         fh.close()
 
-class Element(object):
+class _Element(object):
 
     """Base class for elements in ISCConf.elements attribute.
 
@@ -87,7 +87,7 @@ class Element(object):
             # comment = self.comment.replace('\n', '\n# ')
             fh.write('# %s\n' % self.comment)
 
-class Statement(Element):
+class Statement(_Element):
 
     """Class for ISC configuration statements."""
 
@@ -139,7 +139,7 @@ class Statement(Element):
         else:
             fh.write(';\n')
 
-class Clause(_Conf, Element):
+class Clause(_Conf, _Element):
 
     """Class for ISC configuration clauses."""
 
