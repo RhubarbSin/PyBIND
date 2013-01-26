@@ -80,10 +80,8 @@ class Zone(iscconf.Clause):
 
     def __init__(self, zone_name, type_=None, file_=None, class_='IN'):
         super(Zone, self).__init__('zone', '"%s"' % zone_name, class_)
-        if type_ is not None:
-            self.set_type(type_)
-        if file_ is not None:
-            self.set_file(file_)
+        self.set_type(type_)
+        self.set_file(file_)
 
     def set_type(self, type_):
         self.remove_elements('type')
