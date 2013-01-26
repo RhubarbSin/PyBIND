@@ -13,13 +13,13 @@ class ResourceRecord(object):
         """Return a ResourceRecord object.
 
         Args:
-            name: (string) name of node to which this record belongs
+            name: (str) name of node to which this record belongs
               'host.example.com.'
-            data: (string) data content of the record (varies by type)
+            data: (str) data content of the record (varies by type)
               '192.168.1.1'
-            ttl: (string or integer) time-to-live
+            ttl: (str or integer) time-to-live
               '1h'
-            class_: (string) protocol family
+            class_: (str) protocol family
               'IN'
         """
 

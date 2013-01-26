@@ -8,7 +8,7 @@ def write_indent(fh, indent):
 
     Args:
         fh: (file) file object
-        indent: (integer) number of tabs ('\t') to be written
+        indent: (int) number of tabs ('\t') to be written
     """
 
     for i in range(0, indent):
@@ -55,7 +55,7 @@ class ISCConf(_Conf):
         """Write configuration to file.
 
         Args:
-            filename: (string) path of file name to be written
+            filename: (str) path of file name to be written
         """
 
         with open(filename, 'w') as fh:
@@ -81,7 +81,7 @@ class Statement(Element):
         """Return a Statement object.
 
         Args:
-            label: (string) type of statement
+            label: (str) type of statement
               'allow-transfer'
             value: (tuple) argument(s) for statement to be printed after label
             stanza: (tuple) argument(s) for statement to be printed in 
@@ -101,7 +101,7 @@ class Statement(Element):
 
         Args:
             fh: (file) file object
-            indent: (integer) number of tabs ('\t') for leading whitespace
+            indent: (int) number of tabs ('\t') for leading whitespace
         """
 
         # write label
@@ -130,7 +130,7 @@ class Clause(_Conf, Element):
         """Return a Clause object.
 
         Args:
-            label: (string) type of clause
+            label: (str) type of clause
               'view'
             additional: (tuple) additional data included between name and
               clause's opening brace
@@ -146,7 +146,7 @@ class Clause(_Conf, Element):
 
         Args:
             fh: (file) file object
-            indent: (integer) number of tabs ('\t') for leading whitespace
+            indent: (int) number of tabs ('\t') for leading whitespace
         """
 
         # open the clause

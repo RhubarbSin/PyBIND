@@ -48,11 +48,11 @@ class Zone(object):
         """Return a Zone object.
 
         Args:
-            origin: (string) zone's root; '.' will be appended if necessary
+            origin: (str) zone's root; '.' will be appended if necessary
               'example.com'
             epochserial: (boolean) whether to use number of seconds since
               epoch as default serial number in SOA record
-            ttl: (string or integer) default time-to-live for resource records
+            ttl: (str or int) default time-to-live for resource records
         """
 
         self.origin = origin
@@ -67,7 +67,7 @@ class Zone(object):
         """Write zone file.
 
         Args:
-            filename: (string) name of file to be written
+            filename: (str) name of file to be written
               'zonefile.hosts'
         """
 
@@ -96,17 +96,17 @@ class Zone(object):
         """Add Start of Authority record to zone.
 
         Args:
-            mname: (string) host name of name server authoritative for zone
+            mname: (str) host name of name server authoritative for zone
               'ns1.example.com.'
-            rname: (string) e-mail address of person responsible for zone
+            rname: (str) e-mail address of person responsible for zone
               'hostmaster@example.com'
-            serial: (integer) serial number
+            serial: (int) serial number
               '1969123100'
-            refresh: (string or integer) slave's refresh interval
-            retry: (string or integer) slave's retry interval
-            expiry: (string or integer) slave's expiry interval
-            nxdomain: (string or integer) negative caching time (TTL)
-            name: (string) name of node to which this record belongs
+            refresh: (str or int) slave's refresh interval
+            retry: (str or int) slave's retry interval
+            expiry: (str or int) slave's expiry interval
+            nxdomain: (str or int) negative caching time (TTL)
+            name: (str) name of node to which this record belongs
               'example.com.'
         """
 
@@ -124,11 +124,11 @@ class Zone(object):
         """Add Name Server record to zone.
 
         Args:
-            name_server: (string) host name of name server
+            name_server: (str) host name of name server
               'ns1.example.com.'
-            name: (string) name of node to which this record belongs
+            name: (str) name of node to which this record belongs
               'example.com.'
-            ttl: (string or integer) time-to-live
+            ttl: (str or int) time-to-live
         """
 
         ns = dnsrecord.NS(name, name_server, ttl)
@@ -142,11 +142,11 @@ class ForwardZone(Zone):
         """Add IPv4 Address record to zone.
 
         Args:
-            address: (string) IPv4 address
+            address: (str) IPv4 address
               '192.168.1.1'
-            name: (string) name of node to which this record belongs
+            name: (str) name of node to which this record belongs
               'host.example.com.'
-            ttl: (string or integer) time-to-live
+            ttl: (str or int) time-to-live
         """
 
         a = dnsrecord.A(name, address, ttl)
@@ -156,11 +156,11 @@ class ForwardZone(Zone):
         """Add IPv6 Address record to zone.
 
         Args:
-            address: (string) IPv6 address
+            address: (str) IPv6 address
               '2001:db8::1'
-            name: (string) name of node to which this record belongs
+            name: (str) name of node to which this record belongs
               'host.example.com.'
-            ttl: (string or integer) time-to-live
+            ttl: (str or int) time-to-live
         """
 
         aaaa = dnsrecord.AAAA(name, address, ttl)
@@ -170,11 +170,11 @@ class ForwardZone(Zone):
         """Add Canonical Name record to zone.
 
         Args:
-            canonical: (string) canonical host name of host
+            canonical: (str) canonical host name of host
               'mail.example.com.'
-            name: (string) name of node to which this record belongs
+            name: (str) name of node to which this record belongs
               'mailserver.example.com.'
-            ttl: (string or integer) time-to-live
+            ttl: (str or int) time-to-live
         """
 
         cname = dnsrecord.CNAME(name, canonical_name, ttl)
@@ -184,12 +184,12 @@ class ForwardZone(Zone):
         """Add Mail Exchanger record to zone.
 
         Args:
-            mail_exchanger: (string) host name of mail exchanger
+            mail_exchanger: (str) host name of mail exchanger
               'mail.example.com.'
-            preference: (integer) preference value of mail exchanger
-            name: (string) name of node to which this record belongs
+            preference: (int) preference value of mail exchanger
+            name: (str) name of node to which this record belongs
               'example.com.'
-            ttl: (string or integer) time-to-live
+            ttl: (str or int) time-to-live
         """
 
         mx = dnsrecord.MX(name, preference, mail_exchanger, ttl)
@@ -199,11 +199,11 @@ class ForwardZone(Zone):
         """Add Text record to zone.
 
         Args:
-            text: (string) textual contents of record
+            text: (str) textual contents of record
               'This is a text record'
-            name: (string) name of node to which this record belongs
+            name: (str) name of node to which this record belongs
               'example.com.'
-            ttl: (string or integer) time-to-live
+            ttl: (str or int) time-to-live
         """
 
         txt = dnsrecord.TXT(name, text, ttl)
@@ -217,11 +217,11 @@ class ReverseZone(Zone):
         """Add Pointer record to zone.
 
         Args:
-            address: (string) IPv4 or IPv6 address
+            address: (str) IPv4 or IPv6 address
               '192.168.1.1'
-            name: (string) name of node to which this record belongs
+            name: (str) name of node to which this record belongs
               'ns1.example.com.'
-            ttl: (string or integer) time-to-live
+            ttl: (str or int) time-to-live
         """
 
         ptr = dnsrecord.PTR(address, name, ttl)
