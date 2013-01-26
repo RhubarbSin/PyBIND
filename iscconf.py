@@ -24,9 +24,8 @@ class _Conf(object):
     def add_element(self, element):
         """Add element to elements."""
 
-        if not (isinstance(element, Statement) or
-                isinstance(element, Clause)):
-            raise TypeError('element is not a Statement or Clause')
+        if not isinstance(element, Element):
+            raise TypeError('element is not an Element')
         self.elements.append(element)
 
     def get_elements(self, label):
@@ -67,6 +66,10 @@ class Element(object):
 
     """Base class for elements in ISCConf.elements attribute."""
 
+
+    def __init__(self, comment=None):
+        self.comment = comment
+
     def write(self):
         """Fail-safe in case derived classes fail to override this
         method.
@@ -77,7 +80,7 @@ class Statement(Element):
 
     """Class for ISC configuration statements."""
 
-    def __init__(self, label, value=None, stanza=None):
+    def __init__(self, label, value=None, stanza=None, comment=None):
         """Return a Statement object.
 
         Args:
@@ -92,6 +95,7 @@ class Statement(Element):
         as well as statements with arguments within braces ('{}').
         """
 
+        super(Statement, self).__init__(comment)
         self.label = label
         self.value = value if value else ()
         self.stanza = list(stanza) if stanza else []
