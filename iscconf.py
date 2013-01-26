@@ -42,7 +42,11 @@ class _Conf(object):
 
 class ISCConf(_Conf):
 
-    """Class for ISC configuration."""
+    """Class for ISC software configuration.
+
+    Intended for named, but effort has been made (but not tested) to
+    accomodate dhcpd.
+    """
 
     def __init__(self):
         super(ISCConf, self).__init__()
@@ -59,7 +63,17 @@ class ISCConf(_Conf):
                 element.write(fh)
         fh.close()
 
-class Statement(object):
+class Element(object):
+
+    """Base class for elements in ISCConf.elements attribute."""
+
+    def write(self):
+        """Fail-safe in case derived classes fail to override this
+        method.
+        """
+        raise NotImplementedError;
+
+class Statement(Element):
 
     """Class for ISC configuration statements."""
 
@@ -108,7 +122,7 @@ class Statement(object):
         else:
             fh.write(';\n')
 
-class Clause(_Conf):
+class Clause(_Conf, Element):
 
     """Class for ISC configuration clauses."""
 
