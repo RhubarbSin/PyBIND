@@ -28,7 +28,7 @@ class ACL(iscconf.Statement):
 
     """Class for BIND acl statement."""
 
-    def __init__(self, acl_name, *addresses):
+    def __init__(self, acl_name, addresses):
         super(ACL, self).__init__('acl', ('"%s"' % acl_name,), stanza=addresses)
 
 class View(iscconf.Clause):
@@ -36,7 +36,7 @@ class View(iscconf.Clause):
     """Class for BIND view clause."""
 
     def __init__(self, view_name, class_='IN'):
-        super(View, self).__init__('view', '"%s"' % view_name, class_)
+        super(View, self).__init__('view', ('"%s"' % view_name, class_))
 
     def add_zone(self, zone):
         if type(zone) is not Zone:
@@ -79,7 +79,7 @@ class Zone(iscconf.Clause):
     """Class for BIND zone clause."""
 
     def __init__(self, zone_name, type_=None, file_=None, class_='IN'):
-        super(Zone, self).__init__('zone', '"%s"' % zone_name, class_)
+        super(Zone, self).__init__('zone', ('"%s"' % zone_name, class_))
         self.set_type(type_)
         self.set_file(file_)
 
@@ -117,7 +117,7 @@ class Zone(iscconf.Clause):
 
 def run_tests():
     c = BINDConf()
-    a = ACL('example_acl', '1.1.1.1', '2.2.2.2')
+    a = ACL('example_acl', ('1.1.1.1', '2.2.2.2'))
     c.add_acl(a)
     v = View('example_view')
     c.add_view(v)

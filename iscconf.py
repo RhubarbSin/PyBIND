@@ -18,7 +18,8 @@ class _Conf(object):
 
     """Base class for configuration objects."""
 
-    def __init__(self):
+    def __init__(self, comment=None):
+        self.comment = comment
         self.elements = []  # list of Statement and Clause objects
 
     def add_element(self, element):
@@ -47,8 +48,8 @@ class ISCConf(_Conf):
     accomodate dhcpd.
     """
 
-    def __init__(self):
-        super(ISCConf, self).__init__()
+    def __init__(self, comment=None):
+        super(ISCConf, self).__init__(comment)
 
     def write_file(self, filename):
         """Write configuration to file.
@@ -64,17 +65,27 @@ class ISCConf(_Conf):
 
 class Element(object):
 
-    """Base class for elements in ISCConf.elements attribute."""
+    """Base class for elements in ISCConf.elements attribute.
 
+    Args:
+    comment: (str) comment to precede element's data
+    """
 
     def __init__(self, comment=None):
         self.comment = comment
 
-    def write(self):
-        """Fail-safe in case derived classes fail to override this
-        method.
+    def write(self, fh, indent=0):
+        """Write comment to file.
+
+        Args:
+            fh: (file) file object
+            indent: (int) number of tabs ('\t') for leading whitespace
         """
-        raise NotImplementedError;
+        if self.comment:
+            write_indent(fh, indent)
+            # FIXME: handle newlines in comment string
+            # comment = self.comment.replace('\n', '\n# ')
+            fh.write('# %s\n' % self.comment)
 
 class Statement(Element):
 
@@ -90,6 +101,7 @@ class Statement(Element):
             stanza: (tuple) argument(s) for statement to be printed in 
               a separate stanza within braces
               ('10.1.1.1', '10.1.1.2')
+            comment: (str) comment to precede statement
 
         This syntax allows for statements with all arguments on a single line
         as well as statements with arguments within braces ('{}').
@@ -108,6 +120,7 @@ class Statement(Element):
             indent: (int) number of tabs ('\t') for leading whitespace
         """
 
+        super(Statement, self).write(fh, indent)
         # write label
         write_indent(fh, indent)
         fh.write('%s' % self.label)
@@ -130,7 +143,7 @@ class Clause(_Conf, Element):
 
     """Class for ISC configuration clauses."""
 
-    def __init__(self, label, *additional):
+    def __init__(self, label, additional, comment=None):
         """Return a Clause object.
 
         Args:
@@ -139,9 +152,10 @@ class Clause(_Conf, Element):
             additional: (tuple) additional data included between label and
               clause's opening brace
               ('example_view',)
+            comment: (str) comment to precede clause
         """
 
-        super(Clause, self).__init__()
+        super(Clause, self).__init__(comment)
         self.label = label
         self.additional = additional
 
@@ -153,6 +167,7 @@ class Clause(_Conf, Element):
             indent: (int) number of tabs ('\t') for leading whitespace
         """
 
+        super(Clause, self).write(fh, indent)
         # open the clause
         write_indent(fh, indent)
         fh.write('%s' % self.label)
@@ -171,14 +186,16 @@ class Clause(_Conf, Element):
 def run_tests():
     c = ISCConf()
 
-    v = Clause('view', 'example_view', 'IN')
+    v = Clause('view', ('example_view', 'IN'))
     v.add_element(Statement('notify-source', value=('192.168.1.1',)))
 
-    z = Clause('zone', 'example.com')
-    z.add_element(Statement('also-notify', stanza=('192.168.1.2', '192.168.1.3')))
-    z.add_element(Statement('type', ('master',)))
+    z = Clause('zone', ('example.com',), comment='example.com zone')
+    z.add_element(Statement('also-notify',
+                            stanza=('192.168.1.2', '192.168.1.3')))
+    z.add_element(Statement('type', value=('master',),
+                            comment='testing comment attribute'))
     z.add_element(Statement('file', ('"example.com.hosts"',)))
-    s = Clause('server', '10.1.2.3')
+    s = Clause('server', ('10.1.2.3',))
     v.add_element(s)
     v.add_element(z)
 
