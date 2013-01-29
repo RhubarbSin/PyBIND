@@ -84,10 +84,9 @@ class _Element(object):
             indent: (int) number of tabs ('\t') for leading whitespace
         """
         if self.comment:
-            write_indent(fh, indent)
-            # FIXME: handle newlines in comment string
-            # comment = self.comment.replace('\n', '\n# ')
-            fh.write('# %s\n' % self.comment)
+            for line in self.comment.split('\n'):
+                write_indent(fh, indent)
+                fh.write('# %s\n' % line)
         write_indent(fh, indent)
         fh.write('%s' % self.label)
 
@@ -189,8 +188,9 @@ def run_tests():
     z = Clause('zone', additional=('example.com',), comment='example.com zone')
     z.add_element(Statement('also-notify',
                             stanza=('192.168.1.2', '192.168.1.3')))
-    z.add_element(Statement('type', value=('master',),
-                            comment='testing comment attribute'))
+    comment = """This is a
+multi-line comment"""
+    z.add_element(Statement('type', value=('master',), comment=comment))
     z.add_element(Statement('file', ('"example.com.hosts"',)))
     # s = Clause('server', ('10.1.2.3',))
     # v.add_element(s)
