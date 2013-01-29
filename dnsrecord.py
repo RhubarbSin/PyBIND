@@ -9,7 +9,7 @@ class ResourceRecord(object):
 
     """Base DNS resource record object."""
 
-    def __init__(self, name, data, ttl=None, class_='IN'):
+    def __init__(self, name, data, ttl=None, class_='IN', comment=None):
         """Return a ResourceRecord object.
 
         Args:
@@ -27,6 +27,7 @@ class ResourceRecord(object):
         self.data = data
         self.ttl = ttl
         self.class_ = class_
+        self.comment = comment
 
     def __str__(self):
         ttl_field = '%s ' % self.ttl if self.ttl else ''
@@ -38,68 +39,69 @@ class SOA(ResourceRecord):
     """Start of Authority record."""
 
     def __init__(self, name, mname, rname, serial, refresh, retry,
-                 expiry, minimum, ttl=None):
+                 expiry, minimum, ttl=None, comment=None):
         # ensure e-mail address ends with a dot if it contains '@'
         if rname.find('@') > -1 and not rname.endswith('.'):
             rname += '.'
         rname = rname.replace('@', '.')
         data = '%s %s (%d %s %s %s %s)' % (mname, rname, serial, refresh,
                                            retry, expiry, minimum)
-        super(SOA, self).__init__(name, data, ttl)
+        super(SOA, self).__init__(name, data, ttl, comment=comment)
 
 class NS(ResourceRecord):
 
     """Name Server record."""
 
-    def __init__(self, name, name_server, ttl=None):
-        super(NS, self).__init__(name, name_server, ttl)
+    def __init__(self, name, name_server, ttl=None, comment=None):
+        super(NS, self).__init__(name, name_server, ttl, comment=comment)
 
 class A(ResourceRecord):
 
     """IPv4 Address record."""
 
-    def __init__(self, name, address, ttl=None):
+    def __init__(self, name, address, ttl=None, comment=None):
         ip = ipaddr.IPv4Address(address)
-        super(A, self).__init__(name, ip, ttl)
+        super(A, self).__init__(name, ip, ttl, comment=comment)
 
 class AAAA(ResourceRecord):
 
     """IPv6 Address record."""
 
-    def __init__(self, name, address, ttl=None):
+    def __init__(self, name, address, ttl=None, comment=None):
         ip = ipaddr.IPv6Address(address)
-        super(AAAA, self).__init__(name, ip, ttl)
+        super(AAAA, self).__init__(name, ip, ttl, comment=comment)
 
 class CNAME(ResourceRecord):
 
     """Canonical Name record."""
 
-    def __init__(self, name, canonical_name, ttl=None):
-        super(CNAME, self).__init__(name, canonical_name, ttl)
+    def __init__(self, name, canonical_name, ttl=None, comment=None):
+        super(CNAME, self).__init__(name, canonical_name, ttl, comment=comment)
 
 class MX(ResourceRecord):
 
     """Mail Exchanger record."""
 
-    def __init__(self, name, preference, mail_exchanger, ttl=None):
+    def __init__(self, name, preference, mail_exchanger, ttl=None,
+                 comment=None):
         data = '%d %s' % (preference, mail_exchanger)
-        super(MX, self).__init__(name, data, ttl)
+        super(MX, self).__init__(name, data, ttl, comment=comment)
 
 class TXT(ResourceRecord):
 
     """Text record."""
 
-    def __init__(self, name, text, ttl=None):
-        super(TXT, self).__init__(name, '"%s"' % text, ttl)
+    def __init__(self, name, text, ttl=None, comment=None):
+        super(TXT, self).__init__(name, '"%s"' % text, ttl, comment=comment)
 
 class PTR(ResourceRecord):
 
     """Pointer record."""
 
-    def __init__(self, address, name, ttl=None):
+    def __init__(self, address, name, ttl=None, comment=None):
         ip = ipaddr.IPAddress(address)
         reverse = self._reverse_name(ip)
-        super(PTR, self).__init__(reverse, name, ttl)
+        super(PTR, self).__init__(reverse, name, ttl, comment=comment)
 
     def _reverse_name(self, ip):
         """Return IP address's FQDN in the .arpa domain."""
