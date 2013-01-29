@@ -66,13 +66,15 @@ class ISCConf(_Conf):
 class _Element(object):
 
     """Base class for elements in _Conf.elements attribute.
-
-    Args:
-        label: (str) first word of element
-        comment: (str) comment to precede element
     """
 
     def __init__(self, label, comment=None):
+        """Return an _Element object.
+
+        Args:
+            label: (str) first word of element
+            comment: (str) comment to precede element
+        """
         self.label = label
         self.comment = comment
 
@@ -120,6 +122,18 @@ class Statement(_Element):
         Args:
             fh: (file) file object
             indent: (int) number of tabs ('\t') for leading whitespace
+
+        Statements are written in the following format:
+
+        # comment
+        label value {
+            stanza;
+        };
+
+        Embedded newlines in comments are used as line breaks,
+        implementing proper indentation. Items in the value tuple are
+        separated by spaces. Items in the stanza tuple are written on
+        separate, properly indented lines terminated by semi-colons.
         """
 
         _Element.write(self, fh, indent)
@@ -164,6 +178,19 @@ class Clause(_Conf, _Element):
         Args:
             fh: (file) file object
             indent: (int) number of tabs ('\t') for leading whitespace
+
+        Clauses are written in the following format:
+
+        # comment
+        label additional {
+            elements;
+        };
+
+        Embedded newlines in comments are used as line breaks,
+        implementing proper indentation. Items in the additional tuple
+        are separated by spaces. Items in the elements list are
+        written on separate, properly indented lines terminated by
+        semi-colons.
         """
 
         _Element.write(self, fh, indent)
