@@ -26,7 +26,7 @@ class _Conf(object):
         """Add element to elements."""
 
         if not isinstance(element, _Element):
-            raise TypeError('element is not an Element')
+            raise TypeError('element is not an _Element')
         self.elements.append(element)
 
     def get_elements(self, label):
@@ -69,7 +69,7 @@ class _Element(object):
 
     Args:
         label: (str) first word of element
-        comment: (str) comment to precede element's data
+        comment: (str) comment to precede element
     """
 
     def __init__(self, label, comment=None):
@@ -77,7 +77,7 @@ class _Element(object):
         self.comment = comment
 
     def write(self, fh, indent=0):
-        """Write element's comment to file.
+        """Write element to file.
 
         Args:
             fh: (file) file object
@@ -88,6 +88,8 @@ class _Element(object):
             # FIXME: handle newlines in comment string
             # comment = self.comment.replace('\n', '\n# ')
             fh.write('# %s\n' % self.comment)
+        write_indent(fh, indent)
+        fh.write('%s' % self.label)
 
 class Statement(_Element):
 
@@ -122,9 +124,6 @@ class Statement(_Element):
         """
 
         _Element.write(self, fh, indent)
-        # write label
-        write_indent(fh, indent)
-        fh.write('%s' % self.label)
         if self.value:
             # write items on same line
             for item in self.value:
@@ -169,9 +168,6 @@ class Clause(_Conf, _Element):
         """
 
         _Element.write(self, fh, indent)
-        # open the clause
-        write_indent(fh, indent)
-        fh.write('%s' % self.label)
         for item in self.additional:
             fh.write(' %s' % item)
         fh.write(' {\n')
@@ -196,8 +192,8 @@ def run_tests():
     z.add_element(Statement('type', value=('master',),
                             comment='testing comment attribute'))
     z.add_element(Statement('file', ('"example.com.hosts"',)))
-    s = Clause('server', ('10.1.2.3',))
-    v.add_element(s)
+    # s = Clause('server', ('10.1.2.3',))
+    # v.add_element(s)
     v.add_element(z)
 
     c.add_element(v)
