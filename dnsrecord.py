@@ -109,14 +109,15 @@ class PTR(ResourceRecord):
         if ip.version == 4:
             octets = ip.compressed.split('.')
             octets.reverse()
-            return '.'.join(octets) + '.in-addr.arpa.'
+            fqdn = '.'.join(octets) + '.in-addr.arpa.'
         else:
             # get reversed address without colons
             digits = ip.exploded.replace(':', '')[::-1]
             # add dots
             rev = '.'.join([digits[i] for i in range(0, len(digits))])
             # return fully qualified name
-            return rev + '.ip6.arpa.'
+            fqdn = rev + '.ip6.arpa.'
+        return fqdn
 
 def run_tests():
     recs = []
