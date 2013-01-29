@@ -119,6 +119,22 @@ class Zone(iscconf.Clause):
         finally:
             stmt.stanza.append(master)
 
+class NotImplemented(object):
+
+    """Class for BIND clauses/statements not implemented yet."""
+
+    def __init__(self, *args, **kwargs):
+        raise NotImplementedError
+
+class Controls(NotImplemented): pass
+class Include(NotImplemented): pass
+class Key(NotImplemented): pass
+class Logging(NotImplemented): pass
+class LWRes(NotImplemented): pass
+class Options(NotImplemented): pass
+class Server(NotImplemented): pass
+class TrustedKeys(NotImplemented): pass
+
 def run_tests():
     c = BINDConf()
     a = ACL('example_acl', ('1.1.1.1', '2.2.2.2'))
@@ -133,6 +149,7 @@ def run_tests():
     v.add_zone(z)
     v.set_match_destinations('1.1.1.1', '2.2.2.2')
     v.set_notify_source('3.3.3.3')
+    v.set_comment('view comment')
 
     # v.add_element(Statement('notify-source', '192.168.1.1'))
 
