@@ -76,6 +76,9 @@ class _Element(object):
         self.label = label
         self.comment = comment
 
+    def set_comment(self, comment):
+        self.comment = comment
+
     def write(self, fh, indent=0):
         """Write element to file.
 
