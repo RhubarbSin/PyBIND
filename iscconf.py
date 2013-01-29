@@ -3,8 +3,6 @@
 __version__ = '$Revision: 1.3 $'
 # $Source: /home/blb/pybind/RCS/iscconf.py,v $
 
-from pprint import pprint
-
 def write_indent(fh, indent):
     """Write whitespace to file.
 
