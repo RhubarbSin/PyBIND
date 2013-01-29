@@ -15,12 +15,12 @@ class BINDConf(iscconf.ISCConf):
         super(BINDConf, self).__init__()
 
     def add_acl(self, acl):
-        if type(acl) is not ACL:
+        if not isinstance(acl, ACL):
             raise TypeError('element is not an ACL')
         self.add_element(acl)
 
     def add_view(self, view):
-        if type(view) is not View:
+        if not isinstance(view, View):
             raise TypeError('element is not a View')
         self.add_element(view)
 
@@ -39,7 +39,7 @@ class View(iscconf.Clause):
         super(View, self).__init__('view', ('"%s"' % view_name, class_))
 
     def add_zone(self, zone):
-        if type(zone) is not Zone:
+        if not isinstance(zone, Zone):
             raise TypeError('element is not a Zone')
         self.add_element(zone)
 
