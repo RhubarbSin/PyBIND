@@ -110,7 +110,7 @@ class Zone(object):
               'example.com.'
         """
 
-        if not serial:
+        if serial is None:
             # set default serial number
             if self.epochserial:
                 serial = int(time.time())  # number of seconds since epoch
@@ -262,7 +262,6 @@ def run_tests():
     z = ReverseZone('0.0.0.0.0.0.c.f.ip6.arpa', epochserial=True)
     z.add_soa('ns1.example.com.', 'hostmaster@example.com.')
     z.add_ns('ns1.example.com.')
-    z.add_ptr('192.168.1.1', 'ns1.example.com.')
     z.add_ptr('2001:db8::1', 'ns1.example.com.')
     filename = 'revzone6'
     z.write_file(filename)
