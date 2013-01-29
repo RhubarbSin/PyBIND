@@ -3,6 +3,8 @@
 __version__ = '$Revision: 1.3 $'
 # $Source: /home/blb/pybind/RCS/iscconf.py,v $
 
+from pprint import pprint
+
 def write_indent(fh, indent):
     """Write whitespace to file.
 
@@ -18,8 +20,8 @@ class _Conf(object):
 
     """Base class for configuration objects."""
 
-    def __init__(self, comment=None):
-        self.comment = comment
+    def __init__(self):
+        # super(_Conf, self).__init__()
         self.elements = []  # list of Statement and Clause objects
 
     def add_element(self, element):
@@ -48,8 +50,8 @@ class ISCConf(_Conf):
     accomodate dhcpd.
     """
 
-    def __init__(self, comment=None):
-        super(ISCConf, self).__init__(comment)
+    def __init__(self):
+        _Conf.__init__(self)
 
     def write_file(self, filename):
         """Write configuration to file.
@@ -65,17 +67,19 @@ class ISCConf(_Conf):
 
 class _Element(object):
 
-    """Base class for elements in ISCConf.elements attribute.
+    """Base class for elements in _Conf.elements attribute.
 
     Args:
-    comment: (str) comment to precede element's data
+        label: (str) first word of element
+        comment: (str) comment to precede element's data
     """
 
-    def __init__(self, comment=None):
+    def __init__(self, label, comment=None):
+        self.label = label
         self.comment = comment
 
     def write(self, fh, indent=0):
-        """Write comment to file.
+        """Write element's comment to file.
 
         Args:
             fh: (file) file object
@@ -107,8 +111,7 @@ class Statement(_Element):
         as well as statements with arguments within braces ('{}').
         """
 
-        super(Statement, self).__init__(comment)
-        self.label = label
+        _Element.__init__(self, label, comment)
         self.value = value if value else ()
         self.stanza = list(stanza) if stanza else []
 
@@ -120,7 +123,7 @@ class Statement(_Element):
             indent: (int) number of tabs ('\t') for leading whitespace
         """
 
-        super(Statement, self).write(fh, indent)
+        _Element.write(self, fh, indent)
         # write label
         write_indent(fh, indent)
         fh.write('%s' % self.label)
@@ -155,8 +158,8 @@ class Clause(_Conf, _Element):
             comment: (str) comment to precede clause
         """
 
-        super(Clause, self).__init__(comment)
-        self.label = label
+        _Conf.__init__(self)
+        _Element.__init__(self, label, comment)
         self.additional = additional
 
     def write(self, fh, indent=0):
@@ -167,7 +170,7 @@ class Clause(_Conf, _Element):
             indent: (int) number of tabs ('\t') for leading whitespace
         """
 
-        super(Clause, self).write(fh, indent)
+        _Element.write(self, fh, indent)
         # open the clause
         write_indent(fh, indent)
         fh.write('%s' % self.label)
@@ -189,7 +192,7 @@ def run_tests():
     v = Clause('view', ('example_view', 'IN'))
     v.add_element(Statement('notify-source', value=('192.168.1.1',)))
 
-    z = Clause('zone', ('example.com',), comment='example.com zone')
+    z = Clause('zone', additional=('example.com',), comment='example.com zone')
     z.add_element(Statement('also-notify',
                             stanza=('192.168.1.2', '192.168.1.3')))
     z.add_element(Statement('type', value=('master',),
