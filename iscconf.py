@@ -64,8 +64,7 @@ class ISCConf(_Conf):
 
 class _Element(object):
 
-    """Base class for elements in _Conf.elements attribute.
-    """
+    """Base class for elements in _Conf.elements attribute."""
 
     def __init__(self, label, comment=None):
         """Return an _Element object.
