@@ -28,15 +28,17 @@ class ACL(iscconf.Statement):
 
     """Class for BIND acl statement."""
 
-    def __init__(self, acl_name, addresses):
-        super(ACL, self).__init__('acl', ('"%s"' % acl_name,), stanza=addresses)
+    def __init__(self, acl_name, addresses, comment=None):
+        super(ACL, self).__init__('acl', value=('"%s"' % acl_name,),
+                                  stanza=addresses, comment=comment)
 
 class View(iscconf.Clause):
 
     """Class for BIND view clause."""
 
-    def __init__(self, view_name, class_='IN'):
-        super(View, self).__init__('view', ('"%s"' % view_name, class_))
+    def __init__(self, view_name, class_='IN', comment=None):
+        super(View, self).__init__('view', ('"%s"' % view_name, class_),
+                                   comment=comment)
 
     def add_zone(self, zone):
         if not isinstance(zone, Zone):
@@ -78,8 +80,10 @@ class Zone(iscconf.Clause):
 
     """Class for BIND zone clause."""
 
-    def __init__(self, zone_name, type_=None, file_=None, class_='IN'):
-        super(Zone, self).__init__('zone', ('"%s"' % zone_name, class_))
+    def __init__(self, zone_name, type_=None, file_=None, class_='IN',
+                 comment=None):
+        super(Zone, self).__init__('zone', ('"%s"' % zone_name, class_),
+                                   comment=comment)
         self.set_type(type_)
         self.set_file(file_)
 
@@ -121,7 +125,8 @@ def run_tests():
     c.add_acl(a)
     v = View('example_view')
     c.add_view(v)
-    z = Zone('example.com', 'master', 'example.com.hosts')
+    z = Zone('example.com', 'master', 'example.com.hosts',
+             comment='This is a comment')
     z.set_allow_update('none')
     z.add_master('1.2.3.4')
     z.add_master('1.2.3.5', 5353)
