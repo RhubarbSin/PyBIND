@@ -21,6 +21,8 @@ class ResourceRecord(object):
               '1h'
             class_: (str) protocol family
               'IN'
+            comment: (str) comment for convenience
+              'our first host'
         """
 
         self.name = name.strip()
@@ -30,9 +32,14 @@ class ResourceRecord(object):
         self.comment = comment
 
     def __str__(self):
+        comment_field = ''
+        if self.comment:
+            for line in self.comment.split('\n'):
+                comment_field += '; %s\n' % line
         ttl_field = '%s ' % self.ttl if self.ttl else ''
-        return '%s %s%s %s %s' % (self.name, ttl_field, self.class_,
-                                  self.__class__.__name__, self.data)
+        return '%s%s %s%s %s %s' % (comment_field, self.name, ttl_field,
+                                    self.class_, self.__class__.__name__,
+                                    self.data)
 
 class SOA(ResourceRecord):
 
@@ -115,7 +122,7 @@ class PTR(ResourceRecord):
             digits = ip.exploded.replace(':', '')[::-1]
             # add dots
             rev = '.'.join([digits[i] for i in range(0, len(digits))])
-            # return fully qualified name
+            # fully qualify
             fqdn = rev + '.ip6.arpa.'
         return fqdn
 
