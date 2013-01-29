@@ -19,7 +19,6 @@ class _Conf(object):
     """Base class for configuration objects."""
 
     def __init__(self):
-        # super(_Conf, self).__init__()
         self.elements = []  # list of Statement and Clause objects
 
     def add_element(self, element):
@@ -30,12 +29,12 @@ class _Conf(object):
         self.elements.append(element)
 
     def get_elements(self, label):
-        """Return list of all elements with label from elements."""
+        """Return list of all items with label from elements."""
 
         return [e for e in self.elements if e.label == label]
 
     def remove_elements(self, label):
-        """Remove all elements with label from elements."""
+        """Remove all items with label from elements."""
 
         # modify list in situ
         self.elements[:] = [e for e in self.elements if e.label != label]
