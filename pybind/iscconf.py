@@ -129,9 +129,9 @@ class Statement(_Element):
         };
 
         Embedded newlines in comments are used as line breaks,
-        implementing proper indentation. Items in the value tuple are
-        separated by spaces. Items in the stanza tuple are written on
-        separate, properly indented lines terminated by semi-colons.
+        implementing consistent indentation. Items in the value tuple
+        are separated by spaces. Items in the stanza tuple are written
+        on separate, indented lines terminated by semi-colons.
         """
 
         _Element.write(self, fh, indent)
