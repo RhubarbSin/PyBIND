@@ -21,6 +21,11 @@ class BINDConf(iscconf.ISCConf):
             raise TypeError('%s is not an ACL' % acl)
         self.add_element(acl)
 
+    def add_masters(self, masters):
+        if not isinstance(masters, Masters):
+            raise TypeError('%s is not a Masters' % masters)
+        self.add_element(masters)
+
     def add_view(self, view):
         if not isinstance(view, View):
             raise TypeError('%s is not a View' % view)
@@ -109,6 +114,24 @@ class ACL(iscconf.Statement):
             comment: (str) comment to precede ACL
         """
         iscconf.Statement.__init__(self, 'acl', value=('"%s"' % acl_name,),
+                                   stanza=addresses, comment=comment)
+
+class Masters(iscconf.Statement):
+
+    """Class for BIND acl statement."""
+
+    def __init__(self, masters_name, addresses, comment=None):
+        """Return a Masters object.
+
+        Args:
+            masters_name: (str) masters statement's name
+              'example_acl'
+            addresses: (tuple) IP addresses in the address match list
+              ('192.168.1.1', '192.168.1.2')
+            comment: (str) comment to precede masters statement
+        """
+        iscconf.Statement.__init__(self, 'masters',
+                                   value=('"%s"' % masters_name,),
                                    stanza=addresses, comment=comment)
 
 class View(iscconf.Clause, OptionsAndViewAndZone, OptionsAndView, ViewAndZone):
@@ -217,7 +240,7 @@ class Zone(iscconf.Clause, OptionsAndViewAndZone, ViewAndZone):
         """Add an IP address or masters list name to zone's masters statement.
 
         Args:
-            master: (str) IP address or name or masters list to be added
+            master: (str) IP address or name of masters list to be added
               '192.168.1.1'
             port: (int) port for IP address
             key: (str) authentication key for IP address
@@ -226,8 +249,6 @@ class Zone(iscconf.Clause, OptionsAndViewAndZone, ViewAndZone):
         will fail named's syntax check.
         """
 
-        # supports only IP addresses and not masters lists
-        master = ip
         if port:
             master += ' port %s' % port
         if key:
@@ -262,11 +283,14 @@ def run_tests():
     c = BINDConf()
     a = ACL('example_acl', ('1.1.1.1', '2.2.2.2'))
     c.add_acl(a)
+    m = Masters('example_masters', ('3.3.3.3', '4.4.4.4'), comment='a comment')
+    c.add_masters(m)
     v = View('example_view')
     c.add_view(v)
-    z = Zone('example.com', 'master', 'example.com.hosts',
+    z = Zone('example.com', 'slave', 'example.com.hosts',
              comment='This is a comment')
-    z.set_allow_update('none')
+    # z.set_allow_update('none')
+    z.add_master('example_masters')
     z.add_master('1.2.3.4')
     z.add_master('1.2.3.5', 5353)
     v.add_zone(z)
