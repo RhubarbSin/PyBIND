@@ -210,12 +210,14 @@ class Zone(iscconf.Clause, OptionsAndViewAndZone, ViewAndZone):
         stmt = iscconf.Statement('allow-update', stanza=addresses)
         self.add_element(stmt)
 
-    def add_master(self, ip, port=None, key=None):
+    def add_master(self, master, port=None, key=None):
         """Add an IP address or ACL name to zone's masters statement.
 
         Args:
-            ip: (str) IP address to be added
-            '192.168.1.1'
+            master: (str) IP address or acl name to be added
+              '192.168.1.1'
+            port: (int) port for IP address
+            key: (str) authentication key for IP address
         """
 
         # supports only IP addresses and not masters lists
@@ -223,7 +225,7 @@ class Zone(iscconf.Clause, OptionsAndViewAndZone, ViewAndZone):
         if port:
             master += ' port %s' % port
         if key:
-            master += ' key %s' % key
+            master += ' key "%s"' % key
         try:
             # get existing masters statement
             stmt = self.get_elements('masters')[0]
