@@ -70,7 +70,7 @@ class ACL(iscconf.Statement):
         iscconf.Statement.__init__(self, 'acl', value=('"%s"' % acl_name,),
                                    stanza=addresses, comment=comment)
 
-class View(iscconf.Clause):
+class View(iscconf.Clause, OptionsAndViewAndZone, OptionsAndView, ViewAndZone):
 
     """Class for BIND view clause."""
 
@@ -151,7 +151,7 @@ class View(iscconf.Clause):
         stmt = iscconf.Statement(label, value)
         self.add_element(stmt)
 
-class Zone(iscconf.Clause):
+class Zone(iscconf.Clause, OptionsAndViewAndZone, ViewAndZone):
 
     """Class for BIND zone clause."""
 
@@ -248,7 +248,7 @@ class Include(NotImplemented): pass
 class Key(NotImplemented): pass
 class Logging(NotImplemented): pass
 class LWRes(NotImplemented): pass
-class Options(NotImplemented): pass
+class Options(NotImplemented, OptionsAndViewAndZone, OptionsAndView): pass
 class Server(NotImplemented): pass
 class TrustedKeys(NotImplemented): pass
 
