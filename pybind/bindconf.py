@@ -23,6 +23,36 @@ class BINDConf(iscconf.ISCConf):
             raise TypeError('%s is not a View' % view)
         self.add_element(view)
 
+class OptionsAndViewAndZone(object):
+
+    """Abstract class for Options, View, and Zone classes.
+
+    Methods defined here deal with BIND statements allowed in options,
+    view, and zone clauses.
+    """
+
+    pass
+
+class OptionsAndView(object):
+
+    """Abstract class for Options and View classes.
+
+    Methods defined here deal with BIND statements allowed in options
+    and view clauses.
+    """
+
+    pass
+
+class ViewAndZone(object):
+
+    """Abstract class for View and Zone classes.
+
+    Methods defined here deal with BIND statements allowed in view and
+    zone clauses.
+    """
+
+    pass
+
 class ACL(iscconf.Statement):
 
     """Class for BIND acl statement."""
