@@ -9,6 +9,8 @@ class BINDConf(iscconf.ISCConf):
     """Class for BIND configuration."""
 
     def __init__(self):
+        """Return a BINDConf object."""
+
         super(BINDConf, self).__init__()
 
     def add_acl(self, acl):
@@ -26,6 +28,15 @@ class ACL(iscconf.Statement):
     """Class for BIND acl statement."""
 
     def __init__(self, acl_name, addresses, comment=None):
+        """Return an ACL object.
+
+        Args:
+            acl_name: (str) ACL's name
+              'example_master'
+            addresses: (tuple) IP addresses in the address match list
+              ('192.168.1.1', '192.168.1.2')
+            comment: (str) comment to precede ACL
+        """
         super(ACL, self).__init__('acl', value=('"%s"' % acl_name,),
                                   stanza=addresses, comment=comment)
 
@@ -34,20 +45,50 @@ class View(iscconf.Clause):
     """Class for BIND view clause."""
 
     def __init__(self, view_name, class_='IN', comment=None):
+        """Return a View object.
+
+        Args:
+            view_name: (str) view's name
+              'example_view'
+            class_: (str) view's class
+              'IN'
+            comment: (str) comment to precede view
+        """
+
         super(View, self).__init__('view', ('"%s"' % view_name, class_),
                                    comment=comment)
 
     def add_zone(self, zone):
+        """Add zone to view.
+
+        Args:
+            zone: (Zone) zone to be added
+        """
+
         if not isinstance(zone, Zone):
             raise TypeError('element is not a Zone')
         self.add_element(zone)
 
     def set_match_destinations(self, *addresses):
+        """Set view's match-destinations statement.
+
+        Args:
+            addresses: (tuple) IP addresses in the address match list
+              ('192.168.1.1', '192.168.1.2')
+        """
+
         self.remove_elements('match-destinations')
         stmt = iscconf.Statement('match-destinations', stanza=addresses)
         self.add_element(stmt)
 
     def set_notify_source(self, ip, port=None):
+        """Set clause's notify-source or notify-source-v6 statement.
+
+        Args:
+            ip: (str) source IP address
+            port: (int) source port
+        """
+
         if ipaddr.IPAddress(ip).version == 4:
             label = 'notify-source'
         else:
@@ -61,6 +102,13 @@ class View(iscconf.Clause):
         self.add_element(stmt)
 
     def set_transfer_source(self, ip, port=None):
+        """Set clause's transfer-source or transfer-source-v6 statement.
+
+        Args:
+            ip: (str) source IP address
+            port: (int) source port
+        """
+
         if ipaddr.IPAddress(ip).version == 4:
             label = 'transfer-source'
         else:
@@ -79,27 +127,69 @@ class Zone(iscconf.Clause):
 
     def __init__(self, zone_name, type_=None, file_=None, class_='IN',
                  comment=None):
+        """Return a Zone object.
+
+        Args:
+            zone_name: (str) zone's fully qualified domain name
+              'example.com'
+            type_: (str) zone's type
+              'master'
+            file_: (str) path to zone's file
+              'master/example_view/example.com.hosts'
+            class_: (str) zone's class
+              'IN'
+            comment: (str) comment to precede zone
+        """
+
         super(Zone, self).__init__('zone', ('"%s"' % zone_name, class_),
                                    comment=comment)
         self.set_type(type_)
         self.set_file(file_)
 
     def set_type(self, type_):
+        """Set zone's type statement.
+
+        Args:
+            type_: (str) zone's type
+              'master'
+        """
+
         self.remove_elements('type')
         stmt = iscconf.Statement('type', ('%s' % type_,))
         self.add_element(stmt)
 
     def set_file(self, file_):
+        """Set zone's file statement.
+
+        Args:
+            file_: (str) path to zone's file
+              'master/example_view/example.com.hosts'
+        """
+
         self.remove_elements('file')
         stmt = iscconf.Statement('file', ('"%s"' % file_,))
         self.add_element(stmt)
 
     def set_allow_update(self, *addresses):
+        """Set zone's allow-update statement.
+
+        Args:
+            addresses: (tuple) IP addresses in the address match list
+              ('192.168.1.1', '192.168.1.2')
+        """
+
         self.remove_elements('allow-update')
         stmt = iscconf.Statement('allow-update', stanza=addresses)
         self.add_element(stmt)
 
     def add_master(self, ip, port=None, key=None):
+        """Add an IP address or ACL name to zone's masters statement.
+
+        Args:
+            ip: (str) IP address to be added
+            '192.168.1.1'
+        """
+
         # supports only IP addresses and not masters lists
         master = ip
         if port:
