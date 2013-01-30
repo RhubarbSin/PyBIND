@@ -31,7 +31,45 @@ class OptionsAndViewAndZone(object):
     view, and zone clauses.
     """
 
-    pass
+    def set_notify_source(self, ip, port=None):
+        """Set clause's notify-source or notify-source-v6 statement.
+
+        Args:
+            ip: (str) source IP address
+            port: (int) source port
+        """
+
+        if ipaddr.IPAddress(ip).version == 4:
+            label = 'notify-source'
+        else:
+            label = 'notify-source-v6'
+        self.remove_elements(label)
+        if port:
+            value = (ip, 'port', port)
+        else:
+            value = (ip,)
+        stmt = iscconf.Statement(label, value)
+        self.add_element(stmt)
+
+    def set_transfer_source(self, ip, port=None):
+        """Set clause's transfer-source or transfer-source-v6 statement.
+
+        Args:
+            ip: (str) source IP address
+            port: (int) source port
+        """
+
+        if ipaddr.IPAddress(ip).version == 4:
+            label = 'transfer-source'
+        else:
+            label = 'transfer-source-v6'
+        self.remove_elements(label)
+        if port:
+            value = (ip, 'port', port)
+        else:
+            value = (ip,)
+        stmt = iscconf.Statement(label, value)
+        self.add_element(stmt)
 
 class OptionsAndView(object):
 
@@ -109,46 +147,6 @@ class View(iscconf.Clause, OptionsAndViewAndZone, OptionsAndView, ViewAndZone):
 
         self.remove_elements('match-destinations')
         stmt = iscconf.Statement('match-destinations', stanza=addresses)
-        self.add_element(stmt)
-
-    def set_notify_source(self, ip, port=None):
-        """Set clause's notify-source or notify-source-v6 statement.
-
-        Args:
-            ip: (str) source IP address
-            port: (int) source port
-        """
-
-        if ipaddr.IPAddress(ip).version == 4:
-            label = 'notify-source'
-        else:
-            label = 'notify-source-v6'
-        self.remove_elements(label)
-        if port:
-            value = (ip, 'port', port)
-        else:
-            value = (ip,)
-        stmt = iscconf.Statement(label, value)
-        self.add_element(stmt)
-
-    def set_transfer_source(self, ip, port=None):
-        """Set clause's transfer-source or transfer-source-v6 statement.
-
-        Args:
-            ip: (str) source IP address
-            port: (int) source port
-        """
-
-        if ipaddr.IPAddress(ip).version == 4:
-            label = 'transfer-source'
-        else:
-            label = 'transfer-source-v6'
-        self.remove_elements(label)
-        if port:
-            value = (ip, 'port', port)
-        else:
-            value = (ip,)
-        stmt = iscconf.Statement(label, value)
         self.add_element(stmt)
 
 class Zone(iscconf.Clause, OptionsAndViewAndZone, ViewAndZone):
