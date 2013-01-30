@@ -1,9 +1,4 @@
-"""
-docstring
-"""
-
-__version__ = '$Revision$'
-# $Source$
+__version__ = '0.1.0'
 
 from dnszone import ForwardZone, ReverseZone
 from dnsrecord import SOA, NS, A, AAAA, CNAME, MX, TXT, PTR
