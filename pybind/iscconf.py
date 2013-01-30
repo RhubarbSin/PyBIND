@@ -22,7 +22,7 @@ class _Conf(object):
         """Add element to elements."""
 
         if not isinstance(element, _Element):
-            raise TypeError('element is not an _Element')
+            raise TypeError('%s is not an _Element' % element)
         self.elements.append(element)
 
     def get_elements(self, label):

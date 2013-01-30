@@ -13,12 +13,12 @@ class BINDConf(iscconf.ISCConf):
 
     def add_acl(self, acl):
         if not isinstance(acl, ACL):
-            raise TypeError('element is not an ACL')
+            raise TypeError('%s is not an ACL' % acl)
         self.add_element(acl)
 
     def add_view(self, view):
         if not isinstance(view, View):
-            raise TypeError('element is not a View')
+            raise TypeError('%s is not a View' % view)
         self.add_element(view)
 
 class ACL(iscconf.Statement):
