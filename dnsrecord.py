@@ -126,6 +126,20 @@ class PTR(ResourceRecord):
             fqdn = rev + '.ip6.arpa.'
         return fqdn
 
+class NotImplemented(object):
+
+    """Class for resource record types not implemented yet."""
+
+    def __init__(self, *args, **kwargs):
+        raise NotImplementedError
+
+class DNAME(NotImplemented): pass
+class HINFO(NotImplemented): pass
+class KEY(NotImplemented): pass
+class NXT(NotImplemented): pass
+class SIG(NotImplemented): pass
+class SRV(NotImplemented): pass
+
 def run_tests():
     recs = []
     recs.append(SOA('@', 'ns1.example.com.', 'hostmaster@example.com.',
