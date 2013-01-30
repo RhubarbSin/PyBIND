@@ -1,8 +1,5 @@
 """Classes for writing BIND configuration files."""
 
-__version__ = '$Revision: 1.11 $'
-# $Source: /home/blb/pybind/RCS/bindconf.py,v $
-
 import ipaddr
 
 import iscconf

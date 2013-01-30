@@ -1,8 +1,5 @@
 """Classes for creating DNS resource records."""
 
-__version__ = '$Revision: 1.9 $'
-# $Source: /home/blb/pybind/RCS/dnsrecord.py,v $
-
 import ipaddr
 
 class ResourceRecord(object):

@@ -1,8 +1,5 @@
 """Classes for writing ISC configuration files."""
 
-__version__ = '$Revision: 1.3 $'
-# $Source: /home/blb/pybind/RCS/iscconf.py,v $
-
 def write_indent(fh, indent):
     """Write whitespace to file.
 

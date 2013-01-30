@@ -24,9 +24,6 @@ records will use the zone's default time-to-live (TTL) unless
 otherwise specified.
 """
 
-__version__ = '$Revision: 1.21 $'
-# $Source: /home/blb/pybind/RCS/dnszone.py,v $
-
 import time
 
 import ipaddr
