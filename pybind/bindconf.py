@@ -1,4 +1,7 @@
-"""Classes for writing BIND configuration files."""
+"""Classes for writing BIND configuration files.
+
+This module does not prevent the creation of invalid configuration files.
+"""
 
 import ipaddr
 
@@ -100,7 +103,7 @@ class ACL(iscconf.Statement):
 
         Args:
             acl_name: (str) ACL's name
-              'example_master'
+              'example_acl'
             addresses: (tuple) IP addresses in the address match list
               ('192.168.1.1', '192.168.1.2')
             comment: (str) comment to precede ACL
@@ -211,13 +214,16 @@ class Zone(iscconf.Clause, OptionsAndViewAndZone, ViewAndZone):
         self.add_element(stmt)
 
     def add_master(self, master, port=None, key=None):
-        """Add an IP address or ACL name to zone's masters statement.
+        """Add an IP address or masters list name to zone's masters statement.
 
         Args:
-            master: (str) IP address or acl name to be added
+            master: (str) IP address or name or masters list to be added
               '192.168.1.1'
             port: (int) port for IP address
             key: (str) authentication key for IP address
+
+        Note that specifying port/key with the name of a masters list
+        will fail named's syntax check.
         """
 
         # supports only IP addresses and not masters lists
