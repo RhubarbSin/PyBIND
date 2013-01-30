@@ -67,8 +67,8 @@ class ACL(iscconf.Statement):
               ('192.168.1.1', '192.168.1.2')
             comment: (str) comment to precede ACL
         """
-        super(ACL, self).__init__('acl', value=('"%s"' % acl_name,),
-                                  stanza=addresses, comment=comment)
+        iscconf.Statement.__init__(self, 'acl', value=('"%s"' % acl_name,),
+                                   stanza=addresses, comment=comment)
 
 class View(iscconf.Clause):
 
@@ -85,8 +85,8 @@ class View(iscconf.Clause):
             comment: (str) comment to precede view
         """
 
-        super(View, self).__init__('view', ('"%s"' % view_name, class_),
-                                   comment=comment)
+        iscconf.Clause.__init__(self, 'view', ('"%s"' % view_name, class_),
+                                comment=comment)
 
     def add_zone(self, zone):
         """Add zone to view.
@@ -171,8 +171,8 @@ class Zone(iscconf.Clause):
             comment: (str) comment to precede zone
         """
 
-        super(Zone, self).__init__('zone', ('"%s"' % zone_name, class_),
-                                   comment=comment)
+        iscconf.Clause.__init__(self, 'zone', ('"%s"' % zone_name, class_),
+                                comment=comment)
         self.set_type(type_)
         self.set_file(file_)
 
