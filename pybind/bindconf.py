@@ -11,6 +11,11 @@ examples:
 - Some statements are disallowed based on context; e.g. a zone
   definition of type "master" is not allowed to have a "masters"
   statement.
+
+Some restrictions are enforced here (e.g. you can't define an ACL
+within a view clause), but don't count on them to guarantee a working
+configuration. After all, "BIND allows a daunting list of
+configuration entities."
 """
 
 import ipaddr
