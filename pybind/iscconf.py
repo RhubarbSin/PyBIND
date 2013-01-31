@@ -1,6 +1,6 @@
 """Classes for writing ISC configuration files."""
 
-def write_indent(fh, indent):
+def _write_indent(fh, indent):
     """Write whitespace to file.
 
     Args:
@@ -85,9 +85,9 @@ class _Element(object):
         """
         if self.comment:
             for line in self.comment.split('\n'):
-                write_indent(fh, indent)
+                _write_indent(fh, indent)
                 fh.write('# %s\n' % line)
-        write_indent(fh, indent)
+        _write_indent(fh, indent)
         fh.write('%s' % self.label)
 
 class Statement(_Element):
@@ -143,9 +143,9 @@ class Statement(_Element):
             # write a stanza with one item per line
             fh.write(' {\n');
             for item in self.stanza:
-                write_indent(fh, indent + 1)
+                _write_indent(fh, indent + 1)
                 fh.write('%s;\n' % item)
-            write_indent(fh, indent)
+            _write_indent(fh, indent)
             fh.write('};\n')
         else:
             fh.write(';\n')
@@ -201,7 +201,7 @@ class Clause(_Conf, _Element):
             element.write(fh, indent + 1)
 
         # close the clause
-        write_indent(fh, indent)
+        _write_indent(fh, indent)
         fh.write('};\n')
 
 def run_tests():
