@@ -5,6 +5,7 @@ revzone6
 *_test.py
 RCS/*
 *#
+*~
 *.pyc
 *.html
 dist/*
