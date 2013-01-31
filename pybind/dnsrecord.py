@@ -2,12 +2,12 @@
 
 import ipaddr
 
-class ResourceRecord(object):
+class _ResourceRecord(object):
 
     """Base DNS resource record object."""
 
     def __init__(self, name, data, ttl=None, class_='IN', comment=None):
-        """Return a ResourceRecord object.
+        """Return a _ResourceRecord object.
 
         Args:
             name: (str) name of node to which this record belongs
@@ -38,7 +38,7 @@ class ResourceRecord(object):
                                     self.class_, self.__class__.__name__,
                                     self.data)
 
-class SOA(ResourceRecord):
+class SOA(_ResourceRecord):
 
     """Start of Authority record."""
 
@@ -52,14 +52,14 @@ class SOA(ResourceRecord):
                                            retry, expiry, minimum)
         super(SOA, self).__init__(name, data, ttl, comment=comment)
 
-class NS(ResourceRecord):
+class NS(_ResourceRecord):
 
     """Name Server record."""
 
     def __init__(self, name, name_server, ttl=None, comment=None):
         super(NS, self).__init__(name, name_server, ttl, comment=comment)
 
-class A(ResourceRecord):
+class A(_ResourceRecord):
 
     """IPv4 Address record."""
 
@@ -67,7 +67,7 @@ class A(ResourceRecord):
         ip = ipaddr.IPv4Address(address)
         super(A, self).__init__(name, ip, ttl, comment=comment)
 
-class AAAA(ResourceRecord):
+class AAAA(_ResourceRecord):
 
     """IPv6 Address record."""
 
@@ -75,14 +75,14 @@ class AAAA(ResourceRecord):
         ip = ipaddr.IPv6Address(address)
         super(AAAA, self).__init__(name, ip, ttl, comment=comment)
 
-class CNAME(ResourceRecord):
+class CNAME(_ResourceRecord):
 
     """Canonical Name record."""
 
     def __init__(self, name, canonical_name, ttl=None, comment=None):
         super(CNAME, self).__init__(name, canonical_name, ttl, comment=comment)
 
-class MX(ResourceRecord):
+class MX(_ResourceRecord):
 
     """Mail Exchanger record."""
 
@@ -91,14 +91,14 @@ class MX(ResourceRecord):
         data = '%d %s' % (preference, mail_exchanger)
         super(MX, self).__init__(name, data, ttl, comment=comment)
 
-class TXT(ResourceRecord):
+class TXT(_ResourceRecord):
 
     """Text record."""
 
     def __init__(self, name, text, ttl=None, comment=None):
         super(TXT, self).__init__(name, '"%s"' % text, ttl, comment=comment)
 
-class PTR(ResourceRecord):
+class PTR(_ResourceRecord):
 
     """Pointer record."""
 
