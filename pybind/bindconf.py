@@ -31,7 +31,7 @@ class BINDConf(iscconf.ISCConf):
             raise TypeError('%s is not a View' % view)
         self.add_element(view)
 
-class OptionsAndViewAndZone(object):
+class _OptionsAndViewAndZone(object):
 
     """Abstract class for Options, View, and Zone classes.
 
@@ -79,7 +79,7 @@ class OptionsAndViewAndZone(object):
         stmt = iscconf.Statement(label, value)
         self.add_element(stmt)
 
-class OptionsAndView(object):
+class _OptionsAndView(object):
 
     """Abstract class for Options and View classes.
 
@@ -89,7 +89,7 @@ class OptionsAndView(object):
 
     pass
 
-class ViewAndZone(object):
+class _ViewAndZone(object):
 
     """Abstract class for View and Zone classes.
 
@@ -134,7 +134,7 @@ class Masters(iscconf.Statement):
                                    value=('"%s"' % masters_name,),
                                    stanza=addresses, comment=comment)
 
-class View(iscconf.Clause, OptionsAndViewAndZone, OptionsAndView, ViewAndZone):
+class View(iscconf.Clause, _OptionsAndViewAndZone, _OptionsAndView, _ViewAndZone):
 
     """Class for BIND view clause."""
 
@@ -175,7 +175,7 @@ class View(iscconf.Clause, OptionsAndViewAndZone, OptionsAndView, ViewAndZone):
         stmt = iscconf.Statement('match-destinations', stanza=addresses)
         self.add_element(stmt)
 
-class Zone(iscconf.Clause, OptionsAndViewAndZone, ViewAndZone):
+class Zone(iscconf.Clause, _OptionsAndViewAndZone, _ViewAndZone):
 
     """Class for BIND zone clause."""
 
@@ -275,7 +275,7 @@ class Include(NotImplemented): pass
 class Key(NotImplemented): pass
 class Logging(NotImplemented): pass
 class LWRes(NotImplemented): pass
-class Options(NotImplemented, OptionsAndViewAndZone, OptionsAndView): pass
+class Options(NotImplemented, _OptionsAndViewAndZone, _OptionsAndView): pass
 class Server(NotImplemented): pass
 class TrustedKeys(NotImplemented): pass
 
