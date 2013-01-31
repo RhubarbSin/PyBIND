@@ -1,6 +1,16 @@
 """Classes for writing BIND configuration files.
 
-This module does not prevent the creation of invalid configuration files.
+This module does not prevent the creation of invalid configuration
+files. Any use must account for restrictions and requirements in
+named.conf as specified by the official documentation. Here are some
+examples:
+
+- Definitions must be properly ordered; e.g. access control lists and
+  masters lists must be defined before references to them.
+
+- Some statements are disallowed based on context; e.g. a zone
+  definition of type "master" is not allowed to have a "masters"
+  statement.
 """
 
 import ipaddr
