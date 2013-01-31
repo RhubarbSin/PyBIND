@@ -30,7 +30,7 @@ import ipaddr
 
 import dnsrecord
 
-class Zone(object):
+class _Zone(object):
 
     """Base DNS zone object."""
 
@@ -42,7 +42,7 @@ class Zone(object):
     NXDOMAIN = '1h'
 
     def __init__(self, origin, epochserial=False, ttl=TTL):
-        """Return a Zone object.
+        """Return a _Zone object.
 
         Args:
             origin: (str) zone's root; '.' will be appended if necessary
@@ -131,7 +131,7 @@ class Zone(object):
         ns = dnsrecord.NS(name, name_server, ttl)
         self.add_record(ns)
 
-class ForwardZone(Zone):
+class ForwardZone(_Zone):
 
     """Forward DNS zone."""
 
@@ -206,7 +206,7 @@ class ForwardZone(Zone):
         txt = dnsrecord.TXT(name, text, ttl)
         self.add_record(txt)
 
-class ReverseZone(Zone):
+class ReverseZone(_Zone):
 
     """Reverse DNS zone."""
 
