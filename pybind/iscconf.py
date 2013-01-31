@@ -55,9 +55,18 @@ class ISCConf(_Conf):
         """
 
         with open(filename, 'w') as fh:
-            for element in self.elements:
-                element.write(fh)
+            self.write(fh)
         fh.close()
+
+    def write(self, fh):
+        """Write config to file.
+
+        Args:
+            fh: (file) file object
+        """
+
+        for element in self.elements:
+            element.write(fh)
 
 class _Element(object):
 
