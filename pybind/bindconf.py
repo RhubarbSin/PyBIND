@@ -24,7 +24,7 @@ class BINDConf(iscconf.ISCConf):
     def __init__(self):
         """Return a BINDConf object."""
 
-        super(BINDConf, self).__init__()
+        iscconf.ISCConf.__init__(self)
 
     def add_acl(self, acl):
         if not isinstance(acl, ACL):
