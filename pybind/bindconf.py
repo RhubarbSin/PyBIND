@@ -113,12 +113,17 @@ class ACL(iscconf.Statement):
               ('192.168.1.1', '192.168.1.2')
             comment: (str) comment to precede ACL
         """
+
+        # It could be argued this should be a Clause instead of a
+        # Statement, as some reference material refers to it as such,
+        # but the syntax is accomodated by the definition of Statement
+        # in iscconf.
         iscconf.Statement.__init__(self, 'acl', value=('"%s"' % acl_name,),
                                    stanza=addresses, comment=comment)
 
 class Masters(iscconf.Statement):
 
-    """Class for BIND acl statement."""
+    """Class for BIND masters statement."""
 
     def __init__(self, masters_name, addresses, comment=None):
         """Return a Masters object.
@@ -130,6 +135,8 @@ class Masters(iscconf.Statement):
               ('192.168.1.1', '192.168.1.2')
             comment: (str) comment to precede masters statement
         """
+
+        # See comment about Clause vs. Statement in ACL class.
         iscconf.Statement.__init__(self, 'masters',
                                    value=('"%s"' % masters_name,),
                                    stanza=addresses, comment=comment)
