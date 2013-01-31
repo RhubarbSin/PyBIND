@@ -149,27 +149,60 @@ class ACL(iscconf.Statement):
         iscconf.Statement.__init__(self, 'acl', value=('"%s"' % acl_name,),
                                    stanza=addresses, comment=comment)
 
-class Masters(iscconf.Statement):
+class Masters(iscconf.Clause):
 
-    """Class for BIND masters statement."""
+    """Class for BIND masters clause."""
 
-    def __init__(self, masters_name, addresses, comment=None):
+    def __init__(self, masters_name=None, port=None, comment=None):
         """Return a Masters object.
 
         Args:
             masters_name: (str) masters statement's name
-              'example_acl'
-            addresses: (tuple) IP addresses in the address match list
-              ('192.168.1.1', '192.168.1.2')
+              'example_masters'
+            port: (int) port number for all addresses in clause
             comment: (str) comment to precede masters statement
         """
 
-        # See comment about Clause vs. Statement in ACL class.
-        iscconf.Statement.__init__(self, 'masters',
-                                   value=('"%s"' % masters_name,),
-                                   stanza=addresses, comment=comment)
+        additional = []
+        if masters_name:
+            additional.append(masters_name)
+        if port:
+            additional.extend(['port', port])
+        iscconf.Clause.__init__(self, 'masters', tuple(additional),
+                                comment=comment)
 
-class View(iscconf.Clause, _OptionsAndViewAndZone, _OptionsAndView, _ViewAndZone):
+    def add_master(self, master, port=None, key=None):
+        """Add an IP address or masters list name.
+
+        Args:
+            master: (str) IP address or name of masters list to be added
+              '192.168.1.1'
+            port: (int) port for IP address
+            key: (str) authentication key for IP address
+        """
+
+        value = []
+        try:
+            ip = ipaddr.IPAddress(master)
+        except ValueError:
+            if port or key:
+                if port:
+                    badguy = 'port'
+                else:
+                    badguy = 'key'
+                msg = '%s specified with name of masters list' % badguy
+                raise ValueError(msg)
+        else:
+            master = ip
+            if port:
+                value.extend(['port', port])
+            if key:
+                value.extend(['key', '"%s"' % key])
+        stmt = iscconf.Statement(str(master), value=tuple(value))
+        self.add_element(stmt)
+
+class View(iscconf.Clause, _OptionsAndViewAndZone, _OptionsAndView,
+           _ViewAndZone):
 
     """Class for BIND view clause."""
 
@@ -271,32 +304,15 @@ class Zone(iscconf.Clause, _OptionsAndViewAndZone, _ViewAndZone):
         stmt = iscconf.Statement('allow-update', stanza=addresses)
         self.add_element(stmt)
 
-    def add_master(self, master, port=None, key=None):
-        """Add an IP address or masters list name to zone's masters statement.
+    def set_masters(self, masters):
+        """Set zone's masters clause.
 
         Args:
-            master: (str) IP address or name of masters list to be added
-              '192.168.1.1'
-            port: (int) port for IP address
-            key: (str) authentication key for IP address
-
-        Note that specifying port/key with the name of a masters list
-        will fail named's syntax check.
+            masters: (Masters) Masters object
         """
 
-        if port:
-            master += ' port %s' % port
-        if key:
-            master += ' key "%s"' % key
-        try:
-            # get existing masters statement
-            stmt = self.get_elements('masters')[0]
-        except IndexError:
-            # make new masters statement
-            stmt = iscconf.Statement('masters')
-            self.add_element(stmt)
-        finally:
-            stmt.stanza.append(master)
+        self.remove_elements('masters')
+        self.add_element(masters)
 
 class _NotImplemented(object):
 
@@ -318,16 +334,16 @@ def run_tests():
     c = BINDConf()
     a = ACL('example_acl', ('1.1.1.1', '2.2.2.2'))
     c.add_acl(a)
-    m = Masters('example_masters', ('3.3.3.3', '4.4.4.4'), comment='a comment')
-    c.add_masters(m)
+    # m = Masters('example_masters', ('3.3.3.3', '4.4.4.4'), comment='a comment')
+    # c.add_masters(m)
     v = View('example_view')
     c.add_view(v)
     z = Zone('example.com', 'slave', 'example.com.hosts',
              comment='This is a comment')
     # z.set_allow_update('none')
-    z.add_master('example_masters')
-    z.add_master('1.2.3.4')
-    z.add_master('1.2.3.5', 5353)
+    # z.add_master('example_masters')
+    # z.add_master('1.2.3.4')
+    # z.add_master('1.2.3.5', 5353)
     v.add_zone(z)
     v.set_match_destinations('1.1.1.1', '2.2.2.2')
     v.set_notify_source('3.3.3.3')
