@@ -123,19 +123,19 @@ class PTR(ResourceRecord):
             fqdn = rev + '.ip6.arpa.'
         return fqdn
 
-class NotImplemented(object):
+class _NotImplemented(object):
 
     """Class for resource record types not implemented yet."""
 
     def __init__(self, *args, **kwargs):
-        raise NotImplementedError
+        raise _NotImplementedError
 
-class DNAME(NotImplemented): pass
-class HINFO(NotImplemented): pass
-class KEY(NotImplemented): pass
-class NXT(NotImplemented): pass
-class SIG(NotImplemented): pass
-class SRV(NotImplemented): pass
+class DNAME(_NotImplemented): pass
+class HINFO(_NotImplemented): pass
+class KEY(_NotImplemented): pass
+class NXT(_NotImplemented): pass
+class SIG(_NotImplemented): pass
+class SRV(_NotImplemented): pass
 
 def run_tests():
     recs = []

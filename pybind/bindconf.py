@@ -263,21 +263,21 @@ class Zone(iscconf.Clause, _OptionsAndViewAndZone, _ViewAndZone):
         finally:
             stmt.stanza.append(master)
 
-class NotImplemented(object):
+class _NotImplemented(object):
 
     """Class for BIND clauses/statements not implemented yet."""
 
     def __init__(self, *args, **kwargs):
         raise NotImplementedError
 
-class Controls(NotImplemented): pass
-class Include(NotImplemented): pass
-class Key(NotImplemented): pass
-class Logging(NotImplemented): pass
-class LWRes(NotImplemented): pass
-class Options(NotImplemented, _OptionsAndViewAndZone, _OptionsAndView): pass
-class Server(NotImplemented): pass
-class TrustedKeys(NotImplemented): pass
+class Controls(_NotImplemented): pass
+class Include(_NotImplemented): pass
+class Key(_NotImplemented): pass
+class Logging(_NotImplemented): pass
+class LWRes(_NotImplemented): pass
+class Options(_NotImplemented, _OptionsAndViewAndZone, _OptionsAndView): pass
+class Server(_NotImplemented): pass
+class TrustedKeys(_NotImplemented): pass
 
 def run_tests():
     c = BINDConf()
