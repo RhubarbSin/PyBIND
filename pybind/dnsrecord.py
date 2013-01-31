@@ -18,7 +18,7 @@ class ResourceRecord(object):
               '1h'
             class_: (str) protocol family
               'IN'
-            comment: (str) comment in record's string form
+            comment: (str) comment in record's string representation
               'our first host'
         """
 
