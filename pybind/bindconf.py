@@ -37,16 +37,16 @@ class BINDConf(iscconf.ISCConf):
             raise TypeError('%s is not an ACL' % acl)
         self.add_element(acl)
 
-    def add_masters(self, masters):
-        """Add a masters clause.
+    def add_named_masters(self, named_masters):
+        """Add a named masters clause.
 
         Args:
-            masters: (Masters) Masters object to be added
+            named_masters: (NamedMasters) NamedMasters object to be added
         """
 
-        if not isinstance(masters, Masters):
-            raise TypeError('%s is not a Masters' % masters)
-        self.add_element(masters)
+        if not isinstance(named_masters, NamedMasters):
+            raise TypeError('%s is not a NamedMasters' % named_masters)
+        self.add_element(named_masters)
 
     def add_view(self, view):
         """Add a view clause.
@@ -149,30 +149,23 @@ class ACL(iscconf.Statement):
         iscconf.Statement.__init__(self, 'acl', value=('"%s"' % acl_name,),
                                    stanza=addresses, comment=comment)
 
-class Masters(iscconf.Clause):
+class _Masters(object):
 
-    """Class for BIND masters clause."""
+    """Abstract class for NamedMasters and Masters classes."""
 
-    def __init__(self, masters_name=None, port=None, comment=None):
-        """Return a Masters object.
+    def add_masters_name(self, masters_name):
+        """Add the name of a named masters clause to masters list.
 
         Args:
-            masters_name: (str) masters statement's name
+            masters_name: (str) name of masters list to be added
               'example_masters'
-            port: (int) port number for all addresses in clause
-            comment: (str) comment to precede masters statement
         """
 
-        additional = []
-        if masters_name:
-            additional.append(masters_name)
-        if port:
-            additional.extend(['port', port])
-        iscconf.Clause.__init__(self, 'masters', tuple(additional),
-                                comment=comment)
+        stmt = iscconf.Statement(masters_name)
+        self.add_element(stmt)
 
     def add_master(self, master, port=None, key=None):
-        """Add an IP address or masters list name.
+        """Add an IP address to masters list.
 
         Args:
             master: (str) IP address or name of masters list to be added
@@ -181,25 +174,59 @@ class Masters(iscconf.Clause):
             key: (str) authentication key for IP address
         """
 
+        ip = ipaddr.IPAddress(master)
         value = []
-        try:
-            ip = ipaddr.IPAddress(master)
-        except ValueError:
-            if port or key:
-                if port:
-                    badguy = 'port'
-                else:
-                    badguy = 'key'
-                msg = '%s specified with name of masters list' % badguy
-                raise ValueError(msg)
-        else:
-            master = ip
-            if port:
-                value.extend(['port', port])
-            if key:
-                value.extend(['key', '"%s"' % key])
-        stmt = iscconf.Statement(str(master), value=tuple(value))
+        if port:
+            value.extend(['port', port])
+        if key:
+            value.extend(['key', '"%s"' % key])
+        stmt = iscconf.Statement(str(ip), value=tuple(value))
         self.add_element(stmt)
+
+class NamedMasters(iscconf.Clause, _Masters):
+
+    """Class for named BIND masters clause.
+
+    This is different from a Masters object because it has a name and
+    is allowed only in the global context (as an element of a BINDConf
+    object).
+    """
+
+    def __init__(self, masters_name, port=None, comment=None):
+        """Return a NamedMasters object.
+
+        Args:
+            masters_name: (str) masters statement's name
+              'example_masters'
+            port: (int) port number for all addresses in clause
+            comment: (str) comment to precede masters statement
+        """
+
+        additional = [masters_name]
+        if port:
+            additional.extend(['port', port])
+        iscconf.Clause.__init__(self, 'masters', tuple(additional),
+                                comment=comment)
+
+class Masters(iscconf.Clause, _Masters):
+
+    """Class for BIND masters clause in a slave zone.
+
+    This is different from a NamedMasters object because it has no
+    name and is allowed only in the zone context (as an element of a
+    Zone object).
+    """
+
+    def __init__(self, port=None, comment=None):
+        """Return a Masters object.
+
+        Args:
+            port: (int) port number for all addresses in clause
+            comment: (str) comment to precede masters statement
+        """
+
+        additional = ('port', port) if port else None
+        iscconf.Clause.__init__(self, 'masters', additional, comment=comment)
 
 class View(iscconf.Clause, _OptionsAndViewAndZone, _OptionsAndView,
            _ViewAndZone):
