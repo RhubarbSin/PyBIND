@@ -27,16 +27,34 @@ class BINDConf(iscconf.ISCConf):
         iscconf.ISCConf.__init__(self)
 
     def add_acl(self, acl):
+        """Add an acl statement.
+
+        Args:
+            acl: (ACL) ACL object to be added
+        """
+
         if not isinstance(acl, ACL):
             raise TypeError('%s is not an ACL' % acl)
         self.add_element(acl)
 
     def add_masters(self, masters):
+        """Add a masters clause.
+
+        Args:
+            masters: (Masters) Masters object to be added
+        """
+
         if not isinstance(masters, Masters):
             raise TypeError('%s is not a Masters' % masters)
         self.add_element(masters)
 
     def add_view(self, view):
+        """Add a view clause.
+
+        Args:
+            view: (View) View object to be added
+        """
+
         if not isinstance(view, View):
             raise TypeError('%s is not a View' % view)
         self.add_element(view)
