@@ -72,6 +72,29 @@ class _OptionsAndViewAndZone(object):
     view, and zone clauses.
     """
 
+    def _set_source(self, directive, ip, port=None):
+        """Add statement for various directives for source IP address
+        and port settings.
+
+        Args:
+            directive: (str) type of source
+            ip: (str) source IP address
+            port: (int) source port
+        """
+
+        # this is factored out of set_*_source methods
+        if ipaddr.IPAddress(ip).version == 4:
+            label = directive
+        else:
+            label = '%s-v6' % directive
+        self.remove_elements(label)
+        if port:
+            value = (ip, 'port', port)
+        else:
+            value = (ip,)
+        stmt = iscconf.Statement(label, value)
+        self.add_element(stmt)
+
     def set_notify_source(self, ip, port=None):
         """Set clause's notify-source or notify-source-v6 statement.
 
@@ -80,17 +103,7 @@ class _OptionsAndViewAndZone(object):
             port: (int) source port
         """
 
-        if ipaddr.IPAddress(ip).version == 4:
-            label = 'notify-source'
-        else:
-            label = 'notify-source-v6'
-        self.remove_elements(label)
-        if port:
-            value = (ip, 'port', port)
-        else:
-            value = (ip,)
-        stmt = iscconf.Statement(label, value)
-        self.add_element(stmt)
+        self._set_source('notify-source', ip, port)
 
     def set_transfer_source(self, ip, port=None):
         """Set clause's transfer-source or transfer-source-v6 statement.
@@ -100,17 +113,7 @@ class _OptionsAndViewAndZone(object):
             port: (int) source port
         """
 
-        if ipaddr.IPAddress(ip).version == 4:
-            label = 'transfer-source'
-        else:
-            label = 'transfer-source-v6'
-        self.remove_elements(label)
-        if port:
-            value = (ip, 'port', port)
-        else:
-            value = (ip,)
-        stmt = iscconf.Statement(label, value)
-        self.add_element(stmt)
+        self._set_source('transfer-source', ip, port)
 
 class _OptionsAndView(object):
 
@@ -185,7 +188,7 @@ class _Masters(object):
             value.extend(['port', port])
         if key:
             value.extend(['key', '"%s"' % key])
-        stmt = iscconf.Statement(str(ip), value=tuple(value))
+        stmt = iscconf.Statement(ip, value=value)
         self.add_element(stmt)
 
 class NamedMasters(iscconf.Clause, _Masters):
