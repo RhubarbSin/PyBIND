@@ -110,7 +110,7 @@ class Statement(_Element):
             label: (str) type of statement
               'allow-transfer'
             value: (tuple) argument(s) for statement to be printed after label
-            stanza: (tuple) argument(s) for statement to be printed in 
+            stanza: (tuple) argument(s) for statement to be printed in
               a separate stanza within braces
               ('10.1.1.1', '10.1.1.2')
             comment: (str) comment to precede statement
@@ -150,7 +150,7 @@ class Statement(_Element):
                 fh.write(' %s' % item)
         if self.stanza:
             # write a stanza with one item per line
-            fh.write(' {\n');
+            fh.write(' {\n')
             for item in self.stanza:
                 _write_indent(fh, indent + 1)
                 fh.write('%s;\n' % item)
