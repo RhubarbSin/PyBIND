@@ -1,7 +1,7 @@
 #+TITLE: PyBIND: The Py That BINDs
 This directory contains a python package for creating and writing BIND configuration files and zone files.
 
-=dnszone= is not intended or suitable for general manipulation of zones and zone files; use [[http://www.dnspython.org/][dnspython]] for that. Similary, =bindconfig= doesn't read or parse BIND configuration files; try [[https://code.google.com/p/iscpy/][ISCpy]] for that. These were created specifically for /writing/ files rather than parsing or otherwise manipulating them.
+=dnszone= is not intended or suitable for general manipulation of zones and zone files; use [[http://www.dnspython.org/][dnspython]] for that. Similary, =bindconf= doesn't read or parse BIND configuration files; try [[https://code.google.com/p/iscpy/][ISCpy]] for that. These were created specifically for /writing/ files rather than parsing or otherwise manipulating them.
 
 Terminology and other reference information have been taken from ZYTRAX, Inc.'s [[http://www.zytrax.com/books/dns][DNS for Rocket Scientists]].
 
