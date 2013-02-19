@@ -79,6 +79,7 @@ class _Element(object):
             label: (str) first word of element
             comment: (str) comment to precede element
         """
+
         self.label = label
         self.comment = comment
 
@@ -92,6 +93,7 @@ class _Element(object):
             fh: (file) file object
             indent: (int) number of tabs ('\t') for leading whitespace
         """
+
         if self.comment:
             for line in self.comment.split('\n'):
                 _write_indent(fh, indent)
