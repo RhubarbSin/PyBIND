@@ -176,7 +176,7 @@ class _Masters(object):
         """Add an IP address to masters list.
 
         Args:
-            master: (str) IP address or name of masters list to be added
+            master: (str) IP address of master to be added
               '192.168.1.1'
             port: (int) port for IP address
             key: (str) authentication key for IP address
