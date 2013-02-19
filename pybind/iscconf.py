@@ -177,7 +177,7 @@ class Clause(_Conf, _Element):
 
         _Conf.__init__(self)
         _Element.__init__(self, label, comment)
-        self.additional = additional
+        self.additional = additional if additional else []
 
     def write(self, fh, indent=0):
         """Write clause to file.
