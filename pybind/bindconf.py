@@ -115,6 +115,17 @@ class _OptionsAndViewAndZone(object):
 
         self._set_source('transfer-source', ip, port)
 
+    def set_notify(self, setting):
+        """Set clause's notify statement.
+
+        Args:
+            setting: (str) whether/how to send notifications
+        """
+
+        self.remove_elements('notify')
+        stmt = iscconf.Statement('notify', (setting,))
+        self.add_element(stmt)
+
 class _OptionsAndView(object):
 
     """Abstract class for Options and View classes.
@@ -312,7 +323,7 @@ class Zone(iscconf.Clause, _OptionsAndViewAndZone, _ViewAndZone):
         """
 
         self.remove_elements('type')
-        stmt = iscconf.Statement('type', ('%s' % type_,))
+        stmt = iscconf.Statement('type', (type_,))
         self.add_element(stmt)
 
     def set_file(self, file_):
@@ -375,6 +386,7 @@ def run_tests():
     c.add_view(v)
     z = Zone('example.com', 'slave', 'example.com.hosts',
              comment='This is a comment')
+    z.set_notify('no')
     # z.set_allow_update('none')
     # z.add_master('example_masters')
     # z.add_master('1.2.3.4')
