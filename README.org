@@ -8,13 +8,12 @@ Terminology and other reference information have been taken from ZYTRAX, Inc.'s 
 Patches and suggestions are welcome, but I created these of course to address my own needs.
 
 * TODO
-  - move to GitHub
-  - register with PyPI
-  - add SPF support, other RR types?
+  - make available via PyPI (already registered)
+  - add SPF support, other RR types
   - add DNSSEC support
 
 * Why?
-Building zones from scratch with dnspython is tedious and complicated; it wasn't intended for such use. I initially was successful in doing so, but there seemed to be some bugs in writing the zones to files.
+Building zones from scratch with [[http://www.dnspython.org/][dnspython]] is tedious and complicated; it wasn't intended for such use. I initially was successful in doing so, but there seemed to be some bugs in writing the zones to files.
 
 * License
 
