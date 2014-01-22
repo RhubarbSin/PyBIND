@@ -57,9 +57,11 @@ Patches and suggestions are welcome, but I created these of course to address my
    zone.add_ptr('2001:db8::1', 'ns1.example.com.')
    zone.write_file('%s.hosts' % zone_name)
    #+END_SRC
-* TODO
+
+* Remaining work
   - make available via PyPI (already registered)
   - add SPF support, other RR types
+  - add more config statements
   - add DNSSEC support
 
 * Why?
