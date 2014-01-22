@@ -7,6 +7,56 @@ Terminology and other reference information have been taken from ZYTRAX, Inc.'s 
 
 Patches and suggestions are welcome, but I created these of course to address my own needs.
 
+* Example usage
+** Configuration file
+   #+BEGIN_SRC python
+   import pybind
+   
+   zone = pybind.Zone('example.com', 'master', 'example.com.hosts')
+   view = pybind.View('example_view')
+   view.add_zone(zone)
+   config = pybind.BINDConf()
+   config.add_view(view)
+   config.write_file('named.conf')
+   #+END_SRC
+** Forward zone file
+   #+BEGIN_SRC python
+   import pybind
+   
+   zone = pybind.ForwardZone('example.com')
+   zone.add_soa('ns1', 'hostmaster')
+   zone.add_ns('ns1')
+   zone.add_ns('ns2')
+   zone.add_mx('mail1')
+   zone.add_mx('mail2', 20, ttl=600)
+   zone.add_a('192.168.1.1', 'ns1')
+   zone.add_aaaa('2001:db8::1', 'ns1')
+   zone.add_txt('v=spf1 mx ~all')
+   zone.add_cname('mailserver', 'mail')
+   zone.write_file('example.com.hosts')
+   #+END_SRC
+** IPv4 reverse zone file
+   #+BEGIN_SRC python
+   import pybind
+   
+   zone_name = '1.168.192.in-addr.arpa'
+   zone = pybind.ReverseZone(zone_name)
+   zone.add_soa('ns1.example.com.', 'hostmaster@example.com.')
+   zone.add_ns('ns1.example.com.')
+   zone.add_ptr('192.168.1.1', 'ns1.example.com.')
+   zone.write_file('%s.hosts' % zone_name)
+   #+END_SRC
+** IPv6 reverse zone file
+   #+BEGIN_SRC python
+   import pybind
+
+   zone_name = '0.0.0.0.0.0.0.0.0.8.b.d.1.0.0.2.ip6.arpa'  # /64
+   zone = pybind.ReverseZone(zone_name)
+   zone.add_soa('ns1.example.com.', 'hostmaster@example.com.')
+   zone.add_ns('ns1.example.com.')
+   zone.add_ptr('2001:db8::1', 'ns1.example.com.')
+   zone.write_file('%s.hosts' % zone_name)
+   #+END_SRC
 * TODO
   - make available via PyPI (already registered)
   - add SPF support, other RR types
